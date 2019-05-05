@@ -12,6 +12,7 @@ class Model:
     num_batches_to_log = 100
 
     def __init__(self, config):
+    # 模型的主要参数都写在这里
         self.config = config
         self.sess = tf.Session()
 
@@ -39,6 +40,8 @@ class Model:
             self.word_to_index, self.index_to_word, self.word_vocab_size = \
                 common.load_vocab_from_dict(word_to_count, config.WORDS_VOCAB_SIZE, start_from=1)
             print('Loaded word vocab. size: %d' % self.word_vocab_size)
+            # 啊，这个此表是预先定义好的
+            # 这个是source的词表
 
             self.target_word_to_index, self.index_to_target_word, self.target_word_vocab_size = \
                 common.load_vocab_from_dict(target_to_count, config.TARGET_VOCAB_SIZE,
@@ -77,6 +80,7 @@ class Model:
                                                                 target_word_to_index=self.target_word_to_index,
                                                                 config=self.config)
         optimizer, train_loss = self.build_training_graph(self.queue_thread.input_tensors())
+        # ！
         self.saver = tf.train.Saver(max_to_keep=self.config.MAX_TO_KEEP)
 
         self.initialize_session_variables(self.sess)
@@ -90,6 +94,10 @@ class Model:
                 while True:
                     batch_num += 1
                     _, batch_loss = self.sess.run([optimizer, train_loss])
+
+                    #在这个里面去run了，
+
+
                     sum_loss += batch_loss
                     if batch_num % self.num_batches_to_log == 0:
                         self.trace(sum_loss, batch_num, multi_batch_start_time)
@@ -247,6 +255,7 @@ class Model:
 
     def build_training_graph(self, input_tensors):
         words_input, source_input, path_input, target_input, valid_mask = input_tensors  # (batch, 1),   (batch, max_contexts)
+        
 
         with tf.variable_scope('model'):
             words_vocab = tf.get_variable('WORDS_VOCAB', shape=(self.word_vocab_size + 1, self.config.EMBEDDINGS_SIZE),
@@ -261,17 +270,22 @@ class Model:
                                                  initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0,
                                                                                                             mode='FAN_OUT',
                                                                                                             uniform=True))
+            # 目标单词
             attention_param = tf.get_variable('ATTENTION',
                                               shape=(self.config.EMBEDDINGS_SIZE * 3, 1), dtype=tf.float32)
+            # 权重的参数
             paths_vocab = tf.get_variable('PATHS_VOCAB', shape=(self.path_vocab_size + 1, self.config.EMBEDDINGS_SIZE),
                                           dtype=tf.float32,
                                           initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0,
                                                                                                      mode='FAN_OUT',
                                                                                                      uniform=True))
+            # path的vocab是什么回事
+            # 这个是什么路径呀？
 
             code_vectors, _ = self.calculate_weighted_contexts(words_vocab, paths_vocab, attention_param,
                                                                             source_input, path_input, target_input,
                                                                             valid_mask)
+            # 计算加权的向量
 
             logits = tf.matmul(code_vectors, target_words_vocab, transpose_b=True)
             batch_size = tf.to_float(tf.shape(words_input)[0])
