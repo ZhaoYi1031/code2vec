@@ -22,7 +22,7 @@ class Config:
         config.EMBEDDINGS_SIZE = 128
         config.MAX_TO_KEEP = 10
         # Automatically filled, do not edit:
-        config.TRAIN_PATH = args.data_path
+        config.TRAIN_PATH = args.data_path #要训练的数据的路径
         config.TEST_PATH = args.test_path
         config.SAVE_PATH = args.save_path
         config.LOAD_PATH = args.load_path

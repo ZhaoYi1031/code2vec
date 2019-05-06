@@ -6,6 +6,8 @@ no_such_composite = no_such_word + ',' + no_such_word + ',' + no_such_word
 
 
 class PathContextReader:
+    # 这个类很关键
+
     class_word_table = None
     class_target_word_table = None
     class_path_table = None

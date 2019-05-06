@@ -99,6 +99,7 @@ class Model:
 
 
                     sum_loss += batch_loss
+                    # loss是所有batch的loss的和
                     if batch_num % self.num_batches_to_log == 0:
                         self.trace(sum_loss, batch_num, multi_batch_start_time)
                         print('Number of waiting examples in queue: %d' % self.sess.run(
@@ -138,6 +139,7 @@ class Model:
                                                                   path_to_index=self.path_to_index,
                                                                   target_word_to_index=self.target_word_to_index,
                                                                   config=self.config, is_evaluating=True)
+            # 读路径上下文
             self.eval_placeholder = self.eval_queue.get_input_placeholder()
             self.eval_top_words_op, self.eval_top_values_op, self.eval_original_names_op, _, _, _, _, self.eval_code_vectors = \
                 self.build_test_graph(self.eval_queue.get_filtered_batches())
@@ -299,6 +301,7 @@ class Model:
 
     def calculate_weighted_contexts(self, words_vocab, paths_vocab, attention_param, source_input, path_input,
                                     target_input, valid_mask, is_evaluating=False):
+        # 计算加权上下文
         keep_prob1 = 0.75
         max_contexts = self.config.MAX_CONTEXTS
 
@@ -333,6 +336,7 @@ class Model:
         return code_vectors, attention_weights
 
     def build_test_graph(self, input_tensors, normalize_scores=False):
+    # !
         with tf.variable_scope('model', reuse=self.get_should_reuse_variables()):
             words_vocab = tf.get_variable('WORDS_VOCAB', shape=(self.word_vocab_size + 1, self.config.EMBEDDINGS_SIZE),
                                           dtype=tf.float32, trainable=False)

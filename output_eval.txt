@@ -1,0 +1,20 @@
+Loading model dictionaries from: models/java14_model/dictionaries.bin
+Done
+Created model
+Loading model weights from: models/java14_model/saved_model_iter8.release
+Done
+Loading model dictionaries from: models/java14_model/dictionaries.bin
+Done
+Loading test data from: data/java14m/java14m.test.c2v
+Done loading test data
+Evaluated 102400/368445 examples...
+Prediction throughput: 1638 samples/sec
+Evaluated 204800/368445 examples...
+Prediction throughput: 1709 samples/sec
+Evaluated 307200/368445 examples...
+Prediction throughput: 1736 samples/sec
+Done testing, epoch reached
+Evaluation time: 0H:4M:21S
+[0.50086444 0.54063157 0.5556596  0.56424161 0.56990053 0.57424853
+ 0.57761945 0.58042313 0.58295811 0.58502626]
+Precision: 0.6582174600509684, recall: 0.5314902438062055, F1: 0.5881043842714981
