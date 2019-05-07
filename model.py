@@ -160,8 +160,11 @@ class Model:
             print('Done loading test data')
 
         with open('log.txt', 'w') as output_file:
+            #print("output_file(ohazyi)=", output_file)
+
             if self.config.EXPORT_CODE_VECTORS:
                 code_vectors_file = open(self.config.TEST_PATH + '.vectors', 'w')
+                #print("code_vector_file(ohazyi) = ", code_vectors_file)
             num_correct_predictions = np.zeros(self.topk)
             total_predictions = 0
             total_prediction_batches = 0
@@ -308,6 +311,7 @@ class Model:
         source_word_embed = tf.nn.embedding_lookup(params=words_vocab, ids=source_input)  # (batch, max_contexts, dim)
         path_embed = tf.nn.embedding_lookup(params=paths_vocab, ids=path_input)  # (batch, max_contexts, dim)
         target_word_embed = tf.nn.embedding_lookup(params=words_vocab, ids=target_input)  # (batch, max_contexts, dim)
+        # 3个128的向量分别去embedding一下
 
         context_embed = tf.concat([source_word_embed, path_embed, target_word_embed],
                                   axis=-1)  # (batch, max_contexts, dim * 3)
@@ -404,6 +408,7 @@ class Model:
             original_names = [w for l in original_names for w in l]
             results.append((original_names[0], top_words[0], top_scores[0], attention_per_path))
             if self.config.EXPORT_CODE_VECTORS:
+                print("batch_code_vectors(ohazyi)=", batch_code_vectors)
                 code_vectors.append(batch_code_vectors)
         if len(code_vectors) > 0:
             code_vectors = np.vstack(code_vectors)

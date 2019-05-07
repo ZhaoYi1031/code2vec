@@ -39,6 +39,11 @@ if __name__ == '__main__':
 
     model = Model(config)
     print('Created model')
+    if args.save_path is not None:
+        print(args.save_path)
+        #print("2333")
+        #exit(0)
+
     if config.TRAIN_PATH:
         model.train()
     if args.save_w2v is not None:

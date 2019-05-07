@@ -1,7 +1,5 @@
-int f(int n) {
-    if (n == 0) {
-        return 1; 
-    } else {
-        return n * f(n-1);
-    }
+public void addfilter ( JpaRepositoryFilter filter ) 
+{   
+	if (filter != Null)
+		filters.add(filter); 
 }
